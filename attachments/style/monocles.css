@@ -597,7 +597,7 @@ ul.comment_set {
   #debug_info h5 {
     color: #cccccc; }
 
-input[type='text'], textarea {
+input[type='text'], input[type='password'], textarea {
   font-family: "lucida grande", "sans-serif";
   font-size: 14px;
   padding: 0.3em;
@@ -605,6 +605,8 @@ input[type='text'], textarea {
   width: 66%;
   border-top: 1px solid #666666;
   height: auto; }
+  
+input.error { background-color: #f9e4e4; }
 
 #submit_block {
   text-align: right;
@@ -934,3 +936,12 @@ h1.big_text {
     border: 1px solid #cccccc;
       border-bottom: none;
     padding: 3px 10px; }
+    
+
+.login_setup label{
+  position: relative !important;
+}
+
+.login_setup {
+  margin: 0px 50px;
+}    

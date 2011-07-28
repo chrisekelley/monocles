@@ -12,24 +12,124 @@ var monocles = function() {
 
   // binds UX interaction and form submit event handlers to the signup/login forms
   function showLogin() {
-    function loginFail() { alert('oh noes! an error occurred whilst logging you in')};
-    navigator.id.getVerifiedEmail(function(assertion) {
-      if (assertion) {
-        var verificationURL = couch.rootPath + '_browserid';
-        var verification = { 'assertion': encodeURIComponent(assertion)
-                           , 'audience' : encodeURIComponent(document.domain)
-                           };
-        couch.request({url: verificationURL, type: "POST", data: JSON.stringify(verification)}).then(
-          function(response) { 
-            fetchSession();
-          },
-          loginFail
-        );
-      } else {
-        loginFail();
-      }
-    });
+    function loginFail() { alert('oh noes! an error occurred whilst logging you in');};
+    function manualLogin() {
+    	util.render('loginForm', 'content');
+    	$('#content form').submit(function(e) {
+    		var form = e.target;
+        	var username = $("input[name=username]", form).val();
+        	var password = $("input[name=password]", form).val();
+    		//var message = login(username, password);
+    		var credentials = {
+    		        name : username,
+    		        password : password,
+    				success: function(resp){},
+    					error: function(status) {
+    						message = status;
+    						//callback({name : "Error logging in: "+reason});
+    						callback({"username" : "Error logging in: "+status});
+    							//alert("Cannot login. Error:" + status);
+    					}
+    		      };
+    		try {
+    			//$.couch.login(credentials);	
+    			doLogin(username, password, function(errors) {
+                    if(!$.isEmptyObject(errors)) {
+                      callback(errors);
+                      return;
+                    } else {
+                      //location.reload();
+                      //renderProfile(username);
+  					  fetchSession();
+                    }
+    			});
+    			} catch (e) {
+    				alert("Caught Cannot login. Error:" + e);
+    			}
+    		//$.couch.login(credentials);
+//    		.then(	
+//    				function(){ alert("$.get succeeded"); },
+//    			    function(){ alert("$.get failed!"); }
+    				
+//    			function(credentials) {
+    				
+//    			}
+    		// );	
+        	e.preventDefault();
+        	return false;
+    	});
+    };
+    	manualLogin();
   }
+  
+  // After login, instead of refreshing the page.
+  function renderProfile(username) {
+		couch.userDb().then( function( userDb ) {
+		      var userDocId = "org.couchdb.user:" + encodeURIComponent(username);
+		      userDb.get( userDocId ).then(
+		        function( userDoc ) {
+					var profile = userDoc[ "couch.app.profile" ];
+		            profileReady( profile );
+		              util.render( 'loggedIn', 'account', {
+		                nickname : profile.nickname,
+				        gravatar_url : profile.gravatar_url
+		              });
+		            getPostsWithComments( { reload: true } );
+					}
+					);
+		    });
+  }
+  
+  function callback(errors) {
+      if ($.isEmptyObject(errors)) {
+        dismiss();
+      } else {
+        for (var name in errors) {
+          showError(name, errors[name]);
+        }
+      }
+  }
+  
+  function showError(name, message, element) {
+      var input = $("#usernameField");
+      input.addClass("error").next("div.error").remove();
+      $('<div class="error"></div>').text(message).insertAfter(input);
+    }
+  
+  /**
+   * Thanks futon!
+   */
+  function doLogin(name, password, callback) {
+      $.couch.login({
+        name : name,
+        password : password,
+        success : function() {
+          callback();
+        },
+        error : function(code, error, reason) {
+          callback({name : "Error logging in: "+reason});
+        }
+      });
+    };
+  
+  function login(username, password, callback) {
+		var message = "";
+		var credentials = {
+		        name : username,
+		        password : password,
+				success: function(resp){},
+					error: function(status) {
+						message = status;
+							alert("error: " + status);
+					}
+		      };
+		try {
+		$.couch.login(credentials);	
+		} catch (e) {
+			alert("e:" + e);
+		}
+			return message;
+	}
   
   function showSessionStatus() {
     if (!app.session) {

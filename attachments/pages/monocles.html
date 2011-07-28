@@ -15,6 +15,8 @@
     <script type="text/javascript" src="script/lib/jquery.infieldlabel.js"></script>
     <script type="text/javascript" src="/_utils/script/sha1.js"></script>
     <script type="text/javascript" src="/_utils/script/json2.js"></script>
+    <!-- added old couch for more error handling for login -->
+	<script type="text/javascript" src="script/lib/jquery.couch.js"></script>
     <script type="text/javascript" src="script/lib/jquery.couch2.js"></script>
     <script type="text/javascript" src="script/lib/jquery.mustache.js"></script>
     <script type="text/javascript" src="script/lib/jquery.masonry.min.js"></script>
@@ -109,6 +111,18 @@
         </label>
         <input type="submit" value="Go &rarr;">
         <input type="hidden" name="userCtxName" value="{{name}}" id="userCtxName">
+      </form>
+    </script>
+    
+    
+    <script type="text/mustache" id="loginFormTemplate">
+      <form class="login_setup" id="loginForm">
+        <p>Please login using a couch user.</p>
+        <label for="username">Username
+          <input type="text" name="username" value="" id="usernameField"></label>
+		 <label for="password">Password
+	          <input type="password" name="password" value=""></label>
+        <input type="submit" value="Login">
       </form>
     </script>
 

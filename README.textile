@@ -44,7 +44,12 @@ p. Replicate the local data using by adding documents to the _replication databa
 
 p. One-off replication test:
 
-@curl -X POST -d '{"target":"chatter","source":"http://admin:password@yourcouch.iriscouch.com/chatter"}' http://localhost:5984/_replicate -H "Content-type: application/json"@
+<pre><code>
+curl -X POST -d '{
+"target": "chatter",
+"source": "http://admin:password@yourcouch.iriscouch.com/chatter"}' http://localhost:5984/_replicate
+ -H "Content-type: application/json"
+ </code></pre>
 
 p. Results in an error in doc_write_failures:
 <pre><code>

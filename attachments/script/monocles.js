@@ -20,17 +20,6 @@ var monocles = function() {
         	var username = $("input[name=username]", form).val();
         	var password = $("input[name=password]", form).val();
     		//var message = login(username, password);
-    		var credentials = {
-    		        name : username,
-    		        password : password,
-    				success: function(resp){},
-    					error: function(status) {
-    						message = status;
-    						//callback({name : "Error logging in: "+reason});
-    						callback({"username" : "Error logging in: "+status});
-    							//alert("Cannot login. Error:" + status);
-    					}
-    		      };
     		try {
     			//$.couch.login(credentials);	
     			doLogin(username, password, function(errors) {

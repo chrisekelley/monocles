@@ -9,7 +9,8 @@ p. Pulled from Max Ogden's github. Create a new db in futon called chatter. I al
 p. Add vhost name to etc/hosts.
 
 h3. VHosts in Configuration:
-vhosts	vhostname.com:5984	/chatter/_design/monocles/_rewrite	
+
+@vhosts	vhostname.com:5984	/chatter/__design/monocles/__rewrite@
 
 p. I'm using the node.js couchapp as described in "Max Ogen's tutorial":http://vimeo.com/26147136. I also created a page describing this video "here":http://vetula.blogspot.com/2011/07/sample-couchapp-project-using.html that goes into the background of creating a couchapp using node.js.
 
@@ -17,11 +18,11 @@ p. To push it, use couchapp push app.js http://admin:password@localhost:5984/cha
 
 h3. Changes to the original Monocles
 
-*Added loginFormTemplate to monocles.html
-*Added .login_setup to monocles.css
-*Added input[type='password'] to input[type='text'] in monocles.css
-*Added jquery.couch.js in order to use callback from $.couch.login.
-*Edits to showLogin and other login-related methods, most of which were borrowed from futon. (Thanks futon!)
+* Added loginFormTemplate to monocles.html
+* Added .login_setup to monocles.css
+* Added input[type='password'] to input[type='text'] in monocles.css
+* Added jquery.couch.js in order to use callback from $.couch.login.
+* Edits to showLogin and other login-related methods, most of which were borrowed from futon. (Thanks futon!)
 
 h3. Pushing to another server
 
@@ -33,7 +34,9 @@ h3. Gotcha!
 
 p. Must switch secure_rewrite to false in Config.
 
-p. App is at http://yourcouch.iriscouch.com/chatter/_design/monocles/_rewrite 
+h3. Viewing the app on iriscouch.com
+
+p. App is at http://yourcouch.iriscouch.com/chatter/__design/monocles/_rewrite 
 
 h3. Replication
 

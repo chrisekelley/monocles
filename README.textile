@@ -2,6 +2,74 @@ h1. Monocles (formerly CouchAppSpora)
 
 h2. This is a fork of Max Ogden's Monocles. This version users the local couchDB for authentication instead of OStatus.
 
+h3. Local Development Setup
+
+p.Pulled from Max Ogden's github. Create a new db in futon called chatter. I also tested out Vhosts and CouchDB, as described in "this video":http://vimeo.com/20773112
+
+p. Add vhost name to etc/hosts.
+
+h3. VHosts in Configuration:
+vhosts	vhostname.com:5984	/chatter/_design/monocles/_rewrite	
+
+p.I'm using the node.js couchapp as described in "Max Ogen's tutorial":http://vimeo.com/26147136. I also created a page describing this video "here":http://vetula.blogspot.com/2011/07/sample-couchapp-project-using.html that goes into the background of creating a couchapp using node.js.
+
+p.To push it, use couchapp push app.js http://admin:password@localhost:5984/chatter
+
+h3. Changes to the original Monocles
+
+*Added loginFormTemplate to monocles.html
+*Added .login_setup to monocles.css
+*Added input[type='password'] to input[type='text'] in monocles.css
+*Edits to showLogin and other login-related methods.
+
+h3. Pushing to another server
+
+p. Create database on iriscouch and push the app:
+
+@mbp:monocles chrisk$ couchapp push app.js http://yourcouch.iriscouch.com/chatter@
+
+h3. Gotcha!
+
+p. Must switch secure_rewrite to false in Config.
+
+p. App is at http://yourcouch.iriscouch.com/chatter/_design/monocles/_rewrite 
+
+h3. Replication
+Replicate the local data using by adding documents to the _replication database. Don't use the Futon Replication UI ( from right nav).
+
+p. One-off replication test:
+
+@curl -X POST -d '{"target":"chatter","source":"http://admin:password@yourcouch.iriscouch.com/chatter"}' http://localhost:5984/_replicate -H "Content-type: application/json"@
+
+p. Results in an error:
+
+@{"ok":true,"session_id":"5310c99fcb56e2c1e22b2eb7c5abd8bf","source_last_seq":17,"replication_id_version":2,"history":[{"session_id":"5310c99fcb56e2c1e22b2eb7c5abd8bf","start_time":"Thu, 28 Jul 2011 15:47:22 GMT","end_time":"Thu, 28 Jul 2011 15:47:25 GMT","start_last_seq":0,"end_last_seq":17,"recorded_seq":17,"missing_checked":0,"missing_found":2,"docs_read":2,"docs_written":0,"doc_write_failures":2}]}@
+
+p. Solution:
+
+@curl -X POST -d '{"target":"http://admin:password@localhost:5984/chatter","source":"http://admin:password@yourcouch.iriscouch.com/chatter"}' http://localhost:5984/_replicate -H "Content-type: application/json"@
+
+p. Replication examples:
+
+@{
+   "_id": "to_iriscouch",
+   "source": "http://admin:password@localhost:5984/chatter",
+   "target": "http://admin:password@yourcouch.iriscouch.com/chatter",
+   "continuous": true
+}@
+
+{
+   "_id": "from_iriscouch",
+   "source": "http://admin:password@yourcouch.iriscouch.com/chatter",
+   "target": "http://admin:password@localhost:5984/chatter",
+   "continuous": true
+}@
+
+------------
+
+h2. The original README.textile, continued.
+
+
 h3. ..is (more or less) Diaspora implemented on CouchDB
 
 p. The Diaspora source code was initially "released":http://www.joindiaspora.com/2010/09/15/developer-release.html on September 15th, 2010. This project is an implementation of the Diaspora protocol as a CouchApp built entirely on CouchDB.

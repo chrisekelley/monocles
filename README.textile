@@ -47,10 +47,12 @@ p. One-off replication test:
 @curl -X POST -d '{"target":"chatter","source":"http://admin:password@yourcouch.iriscouch.com/chatter"}' http://localhost:5984/_replicate -H "Content-type: application/json"@
 
 p. Results in an error in doc_write_failures:
-==
- {"ok":true,"session_id":"5310c99fcb56e2c1e22b2eb7c5abd8bf","source_last_seq":17,"replication_id_version":2,"history":[{"session_id":"5310c99fcb56e2c1e22b2eb7c5abd8bf","start_time":"Thu, 28 Jul 2011 15:47:22 GMT","end_time":"Thu, 28 Jul 2011 15:47:25 GMT","start_last_seq":0,"end_last_seq":17,"recorded_seq":17,"missing_checked":0,"missing_found":2,"docs_read":2,"docs_written":0,"
-==
-%{color:red}doc_write_failures% ==":2}]}==
+<pre>
+<code>
+ {"ok":true,"session_id":"5310c99fcb56e2c1e22b2eb7c5abd8bf","source_last_seq":17,"replication_id_version":2,"history":[{"session_id":"5310c99fcb56e2c1e22b2eb7c5abd8bf","start_time":"Thu, 28 Jul 2011 15:47:22 GMT","end_time":"Thu, 28 Jul 2011 15:47:25 GMT","start_last_seq":0,"end_last_seq":17,"recorded_seq":17,"missing_checked":0,"missing_found":2,"docs_read":2,"docs_written":0,"doc_write_failures":2}]}
+</code>
+</pre>
+
 p. Solution:
 
 @curl -X POST -d '{"target":"http://admin:password@localhost:5984/chatter","source":"http://admin:password@yourcouch.iriscouch.com/chatter"}' http://localhost:5984/_replicate -H "Content-type: application/json"@

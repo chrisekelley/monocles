@@ -43,7 +43,6 @@ h3. Replication
 p. Replicate the local data using by adding documents to the _replication database. Don't use the Futon Replication UI ( from right nav).
 
 p. One-off replication test:
-
 <pre><code>
 curl -X POST -d '{
 "target": "chatter",
@@ -71,33 +70,30 @@ p. Results in an error in doc_write_failures:
  </code></pre>
 
 p. Solution:
-
 <pre><code>
  curl -X POST -d '{
- 	"target"==:=="http://admin:password@localhost:5984/chatter",
- 	"source"==:=="http://admin:password@yourcouch.iriscouch.com/chatter"}' http://localhost:5984/_replicate 
+ 	"target": "http://admin:password@localhost:5984/chatter",
+ 	"source": "http://admin:password@yourcouch.iriscouch.com/chatter"}' http://localhost:5984/_replicate 
  	-H "Content-type: application/json"
 </code></pre>
 
 h4. Replication examples:
-
-<pre>
-<code>
+<pre><code>
 {
    "_id": "to_iriscouch",
    "source": "http://admin:password@localhost:5984/chatter",
    "target": "http://admin:password@yourcouch.iriscouch.com/chatter",
    "continuous": true
 }
-
+</code></pre>
+<pre><code>
 {
    "_id": "from_iriscouch",
    "source": "http://admin:password@yourcouch.iriscouch.com/chatter",
    "target": "http://admin:password@localhost:5984/chatter",
    "continuous": true
 }
-</code>
-</pre>
+</code></pre>
 
 ------------
 
